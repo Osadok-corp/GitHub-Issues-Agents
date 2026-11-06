@@ -1,0 +1,5 @@
+{
+  "tags": ["cart", "discount", "price", "bug"],
+  "summary": "When a 10% discount is applied to a cart worth 200 USD, the final total is 190 instead of 180. Looks like the discount is subtracted as a flat number instead of a percentage.",
+  "problem_class": "incorrect calculation"
+}
