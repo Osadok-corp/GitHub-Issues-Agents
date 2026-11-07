@@ -11,6 +11,7 @@ from langchain.agents import create_agent
 from langchain.tools import tool
 from langchain_deepseek import ChatDeepSeek
 
+
 from vector_db import search
 
 # deepseek-chat поддерживает инструменты (reasoner нет)
@@ -21,7 +22,8 @@ SYSTEM_PROMPT = (
     "You are a programming agent. You receive a GitHub issue as JSON. "
     "Use the search_code tool to find the code that causes the problem "
     "(you may call it several times with different queries). "
-    "Then answer with: the file, the function, the line range, and a one-sentence explanation."
+    "Then answer with: the file, the function, the line range, and a one-sentence explanation as JSON string"
+    "JSON fields: 'file', 'function', 'line range'"
 )
 
 
@@ -50,6 +52,7 @@ def main(issue_path):
     result = agent.invoke({"messages": [
         {"role": "user", "content": "GitHub issue:\n" + json.dumps(issue, indent=2)}
     ]})
+
     print(result["messages"][-1].content)
 
 
