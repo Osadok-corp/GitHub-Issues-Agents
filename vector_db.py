@@ -12,11 +12,13 @@ import ast
 import os
 from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
+import threading
 
 import chromadb
 from chromadb.utils.embedding_functions import DefaultEmbeddingFunction
 
 from github_parsing import get_repo_raw_urls, parse_code_by_url
+
 
 DB_PATH = "chroma_db"        # папка, где Chroma хранит индекс на диске
 COLLECTION_NAME = "code_chunks"
@@ -24,9 +26,22 @@ SKIP_DIRS = {"tests", "test", "docs", "doc", "examples", "benchmarks"}  # шум
 BATCH_SIZE = 500             # по сколько чанков отправлять в Chroma за раз
 
 
+_client = None
+_client_lock = threading.Lock()
+
+
+def get_client():
+    """One shared Chroma client for the whole process (thread-safe)."""
+    global _client
+    with _client_lock:
+        if _client is None:
+            _client = chromadb.PersistentClient(path=DB_PATH)
+        return _client
+
+
 def get_collection(reset=False):
     """Открывает (или пересоздаёт) коллекцию с чанками кода."""
-    client = chromadb.PersistentClient(path=DB_PATH)
+    client = get_client()
     if reset:
         try:
             client.delete_collection(COLLECTION_NAME)
@@ -34,8 +49,8 @@ def get_collection(reset=False):
             pass  # коллекции ещё не было
     return client.get_or_create_collection(
         name=COLLECTION_NAME,
-        embedding_function=DefaultEmbeddingFunction(),  # all-MiniLM-L6-v2 (ONNX, локально)
-        configuration={"hnsw": {"space": "cosine"}},    # косинусная метрика
+        embedding_function=DefaultEmbeddingFunction(),
+        configuration={"hnsw": {"space": "cosine"}},
     )
 
 

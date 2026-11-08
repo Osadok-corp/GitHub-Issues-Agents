@@ -46,7 +46,7 @@ pip install -r requirements.txt
 | PyCharm | Run → Edit Configurations → Environment variables |
 
 > **Никогда не вписывайте ключ в код и не коммитьте его.** Если `ChatDeepSeek(...)` в
-> `agent_demo.py` вызывается с аргументом `api_key="..."`, уберите его: без этого аргумента
+> `code_agent.py` вызывается с аргументом `api_key="..."`, уберите его: без этого аргумента
 > ключ берётся из переменной окружения.
 
 **Запуск:**
@@ -59,7 +59,7 @@ python vector_db.py index https://github.com/owner/repo
 python vector_db.py search "discount percent is calculated wrong"
 
 # 3. Полный сценарий: issue -> агент -> ответ
-python agent_demo.py sample_issue.json
+python code_agent.py sample_issue.json
 ```
 
 Для проверки без сети есть локальный репозиторий: `python vector_db.py index demo_repo`.
@@ -358,7 +358,7 @@ shop/cart.py:11-13  Cart.subtotal  (distance=0.58)
 
 ## Агент на DeepSeek
 
-Код: `agent_demo.py`.
+Код: `code_agent.py`.
 
 - **Модель:** `ChatDeepSeek` из пакета `langchain-deepseek`, по умолчанию
   `deepseek-chat` (меняется переменной `DEEPSEEK_MODEL`). Для агента нужна модель с
@@ -381,8 +381,8 @@ shop/cart.py:11-13  Cart.subtotal  (distance=0.58)
 
 | Что хотите изменить | Где | Переиндексировать? |
 |---|---|---|
-| Сколько функций возвращает поиск | `n_results` в `search_code` (`agent_demo.py`) | нет |
-| Модель DeepSeek / системный промпт | `agent_demo.py` | нет |
+| Сколько функций возвращает поиск | `n_results` в `search_code` (`code_agent.py`) | нет |
+| Модель DeepSeek / системный промпт | `code_agent.py` | нет |
 | Какие файлы индексировать | `is_wanted`, `SKIP_DIRS` | **да** |
 | Правила разбиения на чанки, заголовок чанка | `chunk_python_source` | **да** |
 | Модель эмбеддингов | `embedding_function` в `get_collection` | **да** |
