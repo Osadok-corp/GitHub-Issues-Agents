@@ -64,7 +64,7 @@ def find_problem(issue_path):
         model=MODEL_ID,
         temperature=0.1,
         max_tokens=512,
-        api_key="sk-cb90423eb8fe410ab35869c0b406c990"  # так лучше конечно не делать
+        api_key="..."  # так лучше конечно не делать
     )
     agent = create_agent(llm, tools=[search_code], system_prompt=SYSTEM_PROMPT)
 
