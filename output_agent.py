@@ -50,7 +50,7 @@ def make_report(issue_path):
         model=MODEL_ID,
         temperature=0.1,
         max_tokens=512,
-        api_key="sk-cb90423eb8fe410ab35869c0b406c990"  # так лучше конечно не делать
+        api_key="..."  # так лучше конечно не делать
     )
     agent = create_agent(llm, tools=[], system_prompt=SYSTEM_PROMPT)
     msg_text = "GitHub issue:\n" + json.dumps(issue, indent=2)
